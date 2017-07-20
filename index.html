@@ -67,7 +67,7 @@
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc13.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.87.0.min.js"></script>
     
     <script type="text/javascript">
     function listObjectsHandler(err, data){
@@ -129,7 +129,7 @@
     }
 
     function detectBucketName(){
-        var matches = location.hostname.match(/(.*?)\.s3-website-([-\w]*)\.amazonaws\.com/);
+        var matches = location.hostname.match(/(.*?)\.s3-website.cn-([-\w]*)\.amazonaws\.com\.cn/);
         if(matches){
             return matches[1];
         }
@@ -171,13 +171,14 @@
             accessKeyId: '',
             secretAccessKey: ''
         });
-        
+        AWS.config.update({region: 'cn-north-1'});
+        var ep = new AWS.Endpoint('s3.cn-north-1.amazonaws.com.cn');
         var bucket = new AWS.S3({
             params: {
                 Bucket: detectBucketName()
-            }
+            },
+            endpoint: ep
         });
-        
         bucket.listObjects({}, function(err, data){
             if(! err){
                 cachedData = data;
